@@ -1,0 +1,6 @@
+<launch>
+
+  <node name="move_group_interface_demo2" pkg="move_group_interface" type="move_group_interface_demo2" respawn="false" output="screen">
+  </node>
+
+</launch>
