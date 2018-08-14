@@ -1,0 +1,9 @@
+<launch>
+   
+   <!--<node name="link_states" pkg= "rostopic" type="rostopic" output="screen"/> -->
+
+   <!--<node pkg="rostopic" type="rostopic" name="link_states" args="pub /pkg_topic pkg_executable_file/message" output="screen"/>-->
+   <node pkg="rostopic" type="rostopic" name="link_states" args="rosmake pkg_executable_file" output="screen"/>
+
+
+</launch>
