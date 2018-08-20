@@ -1,0 +1,23 @@
+controller_list:
+  - name: arm/joint_trajectory_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - arm_1_joint
+      - arm_2_joint
+      - arm_3_joint
+      - arm_4_joint
+      - arm_5_joint
+      - arm_6_joint
+      - arm_7_joint
+  - name: arm/joint_trajectory_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - arm_ee_link
+  - name: fake_neo_mp_500_controller
+    joints:
+      - wheel_left_joint
+      - wheel_right_joint
