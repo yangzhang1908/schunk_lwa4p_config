@@ -1,0 +1,22 @@
+simple_robot:
+  wheel_velocity_controller:
+    type: "velocity_controllers/JointTrajectoryController"
+    joints:
+      - wheel_right_joint
+      - wheel_left_joint
+    gains: # Required because we're controlling a velocity interface
+      wheel_right_joint: {p: 100,  d: 0.01, i: 0, i_clamp: 1}
+      wheel_left_joint: {p: 100,  d: 0.01, i: 0, i_clamp: 1}
+  #type: effort_controllers/JointTrajectoryController
+  #joint: wheel_right_joint
+  #pid: {p: 100.0, i: 0.01, d: 0.0}
+  # Effort Controllers ---------------------------------------
+  #rwheel_position_controller:
+    #type: effort_controllers/JointTrajectoryController
+    #joint: wheel_right_joint
+    #pid: {p: 100.0, i: 0.01, d: 0.0}
+
+  #lwheel_position_controller:
+    #type: effort_controllers/JointTrajectoryController
+    #joint: wheel_left_joint
+    #pid: {p: 100.0, i: 0.01, d: 0.0}

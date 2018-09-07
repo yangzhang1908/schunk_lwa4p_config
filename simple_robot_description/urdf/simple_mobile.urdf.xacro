@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<robot name="simpleArm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find schunk_description)/urdf/materials.urdf.xacro" />
+  <link name="mobile_base_link">
+    <visual>
+      <geometry>
+        <box size="0.6 0.4 0.2"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.15"/>
+      <material name="Schunk/LightGrey"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.6 0.4 0.2"/>
+      </geometry>
+    </collision>
+  <visual >
+      <origin xyz="-0.2 0 0" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+      <material name="Schunk/DarkGrey"/>
+  </visual>
+  <collision name='castor_front_collision'>
+      <origin xyz="-0.2 0 0" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+  </collision>
+  </link>
+
+<!--link of right wheel" /-->
+  <link name="mobile_right_wheel">
+    <visual>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <material name="Schunk/Black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="base_to_right_wheel" type="fixed">
+    <parent link="mobile_base_link"/>
+    <child link="mobile_right_wheel"/>
+    <origin xyz="0.2 0.225 0.05"/>
+  </joint>
+
+<!--link of left wheel" /-->
+  <link name="mobile_left_wheel">
+    <visual>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <material name="Schunk/Black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="base_to_left_wheel" type="fixed">
+    <parent link="mobile_base_link"/>
+    <child link="mobile_left_wheel"/>
+    <origin xyz="0.2 -0.225 0.05"/>
+  </joint>
+
+<!--link of front wheel" />
+  <link name="mobile_vor_wheel">
+    <visual>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <material name="Schunk/DarkGrey"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="base_to_vor_wheel" type="floating">
+    <parent link="mobile_base_link"/>
+    <child link="mobile_vor_wheel"/>
+    <origin xyz="-0.2 0 0.05"/>
+  </joint-->
+
+</robot>

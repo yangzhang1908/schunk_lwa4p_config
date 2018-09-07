@@ -1,0 +1,411 @@
+<?xml version="1.0"?>
+<robot name="simplearm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--material name="Schunk/LightGrey">
+    <color rgba="0.7 0.7 0.7 0.6"/>
+  </material>
+  <material name="Schunk/DarkGrey">
+    <color rgba="0.4 0.4 0.4 1.0"/>
+  </material>
+  <material name="Schunk/Black">
+    <color rgba="0.0 0.2 0.0 1.0"/>
+  </material>
+  <material name="Schunk/DarkGolden">
+    <color rgba="0.7 0.3 0.3 1.0"/>
+  </material>
+  <material name="Schunk/Blue">
+    <color rgba="0.0 0.0 0.7 1.0"/>
+  </material-->
+  <xacro:include filename="$(find schunk_description)/urdf/materials.urdf.xacro" />
+
+  <!-- Base Link -->
+
+  <!-- Used for fixing robot to Gazebo -->
+  <link name="world"/>
+
+  <link name="arm_base_link">
+   <visual>
+      <geometry>
+        <cylinder length="0.2" radius="0.1"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="Schunk/DarkGolden"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.2" radius="0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <!-- joint between base_link and lwa4p_extended_connector_link -->
+  <joint name="arm_base_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0.35"/>
+    <parent link="world"/>
+    <child link="arm_base_link"/>
+  </joint>
+
+  <!-- link 1 -->
+  <link name="arm_1_link">
+   <visual>
+      <geometry>
+        <box size="0.04 0.04 0.04"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="Schunk/DarkGrey"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.04 0.04 0.04"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+  </link>
+
+  <!-- joint 1 between base_link and arm_1_link -->
+  <joint name="arm_1_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0.12"/>
+    <parent link="arm_base_link"/>
+    <child link="arm_1_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="370" lower="-3.14" upper="3.14" velocity="1.26"/>
+  </joint>
+
+  <!-- link 2 -->
+  <link name="arm_2_link">
+   <visual>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <material name="Schunk/Blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.42"/>
+      <geometry>
+        <box size="0.04 0.04 0.8"/>
+      </geometry>
+      <material name="Schunk/Blue"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.42"/>
+      <geometry>
+        <box size="0.04 0.04 0.6"/>
+      </geometry>
+    </collision>
+   <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0 0 0" xyz="0 0 0.42"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+   <visual>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+      </geometry>
+      <origin rpy="1.5707 0 0" xyz="0 0 0.84"/>
+      <material name="Schunk/Blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0 1.5707 0" xyz="0 0 0.84"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+  </link>
+  <!-- joint 2 between arm_1_link and arm_2_link-->
+  <joint name="arm_2_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 -0.04 0"/>
+    <parent link="arm_1_link"/>
+    <child link="arm_2_link"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="370" lower="-1.57" upper="1.57" velocity="1.26"/>
+    <safety_controller k_position="20" k_velocity="50" soft_lower_limit="${-6.28 + 0.01}" soft_upper_limit="${6.28 - 0.01}" />
+  </joint>
+
+  <!-- link 3 -->
+  <link name="arm_3_link">
+   <visual>
+      <geometry>
+        <box size="0.04 0.04 0.04"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="Schunk/DarkGrey"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.04 0.04 0.04"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+  </link>
+  <!-- joint 3 between link 2 and link3 -->
+  <joint name="arm_3_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.04 0.84"/>
+    <parent link="arm_2_link"/>
+    <child link="arm_3_link"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="370" lower="-3.14" upper="3.14" velocity="1.26"/>
+    <safety_controller k_position="20" k_velocity="50" soft_lower_limit="${-6.28 + 0.01}" soft_upper_limit="${6.28 - 0.01}" />
+  </joint>
+
+  <!-- link 4 -->
+  <link name="arm_4_link">
+   <visual>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+      <material name="Schunk/Blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.32"/>
+      <geometry>
+        <box size="0.04 0.04 0.6"/>
+      </geometry>
+      <material name="Schunk/Blue"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.32"/>
+      <geometry>
+        <box size="0.04 0.04 0.6"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0 0 0" xyz="0 0 0.32"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+   <visual>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+      </geometry>
+      <origin rpy="0 1.5707 0" xyz="0 0 0.64"/>
+      <material name="Schunk/Blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0 1.5707 0" xyz="0 0 0.64"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+  </link>
+  <!-- joint 4 between arm_3_link and arm_4_link-->
+  <joint name="arm_4_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0.04 0.0 0.0"/>
+    <parent link="arm_3_link"/>
+    <child link="arm_4_link"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="370" lower="-3.14" upper="3.14" velocity="1.26"/>
+    <safety_controller k_position="20" k_velocity="50" soft_lower_limit="${-6.28 + 0.01}" soft_upper_limit="${6.28 - 0.01}" />
+  </joint>
+
+  <!-- link 5 -->
+  <link name="arm_5_link">
+   <visual>
+      <geometry>
+        <box size="0.04 0.04 0.04"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="Schunk/DarkGrey"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.04 0.04 0.04"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+  </link>
+  <!-- joint 5 between link 3 and link4 -->
+  <joint name="arm_5_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="-0.04 0 0.64"/>
+    <parent link="arm_4_link"/>
+    <child link="arm_5_link"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="370" lower="-3.14" upper="3.14" velocity="1.26"/>
+    <safety_controller k_position="20" k_velocity="50" soft_lower_limit="${-6.28 + 0.01}" soft_upper_limit="${6.28 - 0.01}" />
+  </joint>
+
+  <!-- link 6 -->
+  <link name="arm_6_link">
+   <visual>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <material name="Schunk/Blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.22"/>
+      <geometry>
+        <box size="0.04 0.04 0.4"/>
+      </geometry>
+      <material name="Schunk/Blue"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.22"/>
+      <geometry>
+        <box size="0.04 0.04 0.4"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0 0 0" xyz="0 0 0.22"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+   <visual>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+      </geometry>
+      <origin rpy="1.5707 0 0" xyz="0 0 0.44"/>
+      <material name="Schunk/Blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="1.5707 0 0" xyz="0 0 0.44"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+  </link>
+  <!-- joint 6 between arm_5_link and arm_6_link-->
+  <joint name="arm_6_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 -0.04 0.0"/>
+    <parent link="arm_5_link"/>
+    <child link="arm_6_link"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="370" lower="-3.14" upper="3.14" velocity="1.26"/>
+    <safety_controller k_position="20" k_velocity="50" soft_lower_limit="${-6.28 + 0.01}" soft_upper_limit="${6.28 - 0.01}" />
+  </joint>
+
+  <!-- link 7 -->
+  <link name="arm_7_link">
+   <visual>
+      <geometry>
+        <box size="0.04 0.04 0.04"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="Schunk/DarkGrey"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.04 0.04 0.04"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+  </link>
+  <!-- joint 7 between link 3 and link4 -->
+  <joint name="arm_7_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.04 0.44"/>
+    <parent link="arm_6_link"/>
+    <child link="arm_7_link"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="370" lower="-3.14" upper="3.14" velocity="1.26"/>
+    <safety_controller k_position="20" k_velocity="50" soft_lower_limit="${-6.28 + 0.01}" soft_upper_limit="${6.28 - 0.01}" />
+  </joint>
+
+  <!-- link 8 ee -->
+  <link name="arm_8_link">
+   <visual>
+      <geometry>
+        <cylinder length="0.06" radius="0.02"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="Schunk/Blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.04" radius="0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <!-- joint 8 ee between arm_7_link and arm_8_link-->
+  <joint name="arm_8_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.0 0.04"/>
+    <parent link="arm_7_link"/>
+    <child link="arm_8_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="370" lower="-0.7" upper="0.7" velocity="1.26"/>
+    <safety_controller k_position="20" k_velocity="50" soft_lower_limit="${-6.28 + 0.01}" soft_upper_limit="${6.28 - 0.01}" />
+  </joint>
+
+</robot>
